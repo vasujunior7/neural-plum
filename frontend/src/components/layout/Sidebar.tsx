@@ -1,4 +1,4 @@
-import { LayoutDashboard, FileText, Users, Activity } from "lucide-react"
+import { LayoutDashboard, FileText, Activity } from "lucide-react"
 import { Link, useLocation } from "react-router-dom"
 import { cn } from "../../utils/cn"
 

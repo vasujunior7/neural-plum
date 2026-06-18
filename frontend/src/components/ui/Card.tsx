@@ -1,8 +1,9 @@
 import { forwardRef } from "react"
 import { motion } from "framer-motion"
+import type { HTMLMotionProps } from "framer-motion"
 import { cn } from "../../utils/cn"
 
-export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface CardProps extends HTMLMotionProps<"div"> {
   interactive?: boolean
   panel?: boolean
 }

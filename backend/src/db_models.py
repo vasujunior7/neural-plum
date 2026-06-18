@@ -16,6 +16,12 @@ class DBClaim(Base):
     rejection_reasons = Column(JSON, nullable=True)
     notes = Column(JSON, nullable=True)
     confidence = Column(Float)
+    rationale = Column(JSON, nullable=True)
+    field_confidences = Column(JSON, nullable=True)
+    semantic_fraud_result = Column(JSON, nullable=True)
+    claim_plan = Column(JSON, nullable=True)
+    human_summary = Column(String, nullable=True)
+    handler_checklist = Column(JSON, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
 class DBTrace(Base):
@@ -25,3 +31,4 @@ class DBTrace(Base):
     state = Column(String)
     result = Column(JSON)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
+

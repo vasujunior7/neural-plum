@@ -30,5 +30,7 @@ class DecisionAgent(BaseAgent):
             notes=res.notes,
             rejection_reasons=res.rejection_reasons,
             decision=decision,
-            approved_amount=res.approved_amount
+            approved_amount=res.approved_amount,
+            rationale=res.rationale
         )
+

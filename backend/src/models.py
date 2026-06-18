@@ -29,11 +29,14 @@ class DecisionType(str, Enum):
 
 class ClaimState(str, Enum):
     IDLE = "IDLE"
+    PLANNING = "PLANNING"
     VERIFYING = "VERIFYING"
     EXTRACTING = "EXTRACTING"
     ADJUDICATING = "ADJUDICATING"
     FRAUD_CHECKING = "FRAUD_CHECKING"
+    SEMANTIC_FRAUD = "SEMANTIC_FRAUD"
     DECIDING = "DECIDING"
+    SUMMARIZING = "SUMMARIZING"
     DONE = "DONE"
 
 class DocumentInput(BaseModel):
@@ -157,6 +160,51 @@ class PolicyConfig(BaseModel):
     fraud_thresholds: FraudThresholds
     members: List[MemberInfo]
 
+# --- Phase 1: Explainability Layer ---
+class DecisionRationale(BaseModel):
+    rule_triggered: str          # e.g. "waiting_period_check"
+    policy_reference: str        # e.g. "§ waiting_periods.diabetes"
+    computed_value: str          # e.g. "45 days elapsed"
+    threshold_value: str         # e.g. "90 days required"
+    human_explanation: str       # Plain English, claimant-facing
+
+# --- Phase 2: Confidence-Calibrated Extraction ---
+class ExtractedField(BaseModel):
+    value: Optional[Any] = None
+    confidence: float = 1.0
+    source_span: Optional[str] = None
+
+# --- Phase 3: Semantic Fraud ---
+class FraudFlag(BaseModel):
+    signal: str
+    severity: str  # "low" | "medium" | "high"
+    fields_involved: List[str] = Field(default_factory=list)
+
+class SemanticFraudResult(BaseModel):
+    fraud_score: float = 0.0
+    flags: List[FraudFlag] = Field(default_factory=list)
+    recommendation: str = "APPROVE"  # "APPROVE" | "MANUAL_REVIEW" | "REJECT"
+
+# --- Phase 4: Planner Agent ---
+class ClaimPlan(BaseModel):
+    claim_category: str = ""
+    complexity_score: float = 0.5
+    agents_to_run: List[str] = Field(default_factory=list)
+    agents_to_skip: Dict[str, str] = Field(default_factory=dict)
+    fast_track: bool = False
+
+# --- Phase 6: Manual Review Checklist ---
+class ChecklistItem(BaseModel):
+    priority: int           # 1 = highest
+    action: str             # what to verify
+    reason: str             # why it needs review
+    source_agent: str       # which agent flagged it
+    estimated_minutes: int  # how long this check takes
+
+class ManualReviewChecklist(BaseModel):
+    items: List[ChecklistItem] = Field(default_factory=list)
+    total_estimated_minutes: int = 0
+
 # Agent Result Base
 class AgentResult(BaseModel):
     passed: bool
@@ -165,6 +213,7 @@ class AgentResult(BaseModel):
     rejection_reasons: List[str] = Field(default_factory=list)
     decision: Optional[DecisionType] = None
     approved_amount: Optional[float] = None
+    rationale: List[DecisionRationale] = Field(default_factory=list)
 
 # Check Result (Deterministic Rules)
 class LineItemAdjudication(BaseModel):
@@ -180,3 +229,4 @@ class CheckResult(BaseModel):
     approved_amount: Optional[float] = None
     line_items: List[LineItemAdjudication] = Field(default_factory=list)
     notes: List[str] = Field(default_factory=list)
+    rationale: List[DecisionRationale] = Field(default_factory=list)
