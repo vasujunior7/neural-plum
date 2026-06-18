@@ -1,6 +1,7 @@
 # 🌟 Neural Plum
 
 <div align="center">
+  <img src="frontend/src/assets/hero.png" width="200" alt="Neural Plum Logo" />
   <h3>An advanced, AI-powered Multi-Agent System for Health Insurance Claims Processing</h3>
   <p>Automate end-to-end adjudication with Explainability, Semantic Fraud Detection, and Graceful Degradation.</p>
 </div>
