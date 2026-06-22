@@ -60,6 +60,7 @@ class ClaimSubmission(BaseModel):
     treatment_date: str
     claimed_amount: float
     ytd_claims_amount: float = 0.0
+    ytd_alternative_sessions: int = 0
     hospital_name: Optional[str] = None
     documents: List[DocumentInput]
     claims_history: Optional[List[ClaimHistory]] = None
