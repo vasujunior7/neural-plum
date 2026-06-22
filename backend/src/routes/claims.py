@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Security, Form, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, Security, Form, UploadFile, File, Request
 from sqlalchemy.orm import Session
 from ..database import get_db
 from ..db_models import DBClaim
@@ -10,11 +10,14 @@ from ..policy.loader import get_policy
 from ..agents.supervisor import Supervisor
 from ..tracing.logger import TraceLogger
 from ..auth import verify_api_key
+from ..rate_limiter import limiter
 
 router = APIRouter(prefix="/v1/claims", tags=["claims"])
 
 @router.post("")
+@limiter.limit("5/minute")
 async def submit_claim(
+    request: Request,
     member_id: str = Form(...),
     claim_category: str = Form(...),
     claimed_amount: float = Form(...),
