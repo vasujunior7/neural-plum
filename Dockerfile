@@ -13,6 +13,9 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 # Copy the backend code into the container
 COPY ./backend /code/backend
 
+# Copy the policy terms into the container
+COPY ./policy_terms.json /code/policy_terms.json
+
 # Create a non-root user (Strict requirement for Hugging Face Spaces)
 RUN useradd -m -u 1000 user
 
