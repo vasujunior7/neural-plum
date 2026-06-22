@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClaimsCommand | Adjudication Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Geist:wght@400;500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(11, 19, 38, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .row-hover-effect:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: scale(1.005);
+            box-shadow: 0 0 20px rgba(208, 188, 255, 0.1);
+        }
+        body {
+            background-color: #0b1326;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(109, 59, 215, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.15) 0px, transparent 50%);
+            min-height: 100vh;
+            color: #dae2fd;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b1326;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2d3449;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#001f26",
+                        "primary-fixed-dim": "#d0bcff",
+                        "on-tertiary": "#620040",
+                        "secondary-fixed": "#acedff",
+                        "secondary-container": "#03b5d3",
+                        "on-error": "#690005",
+                        "surface": "#0b1326",
+                        "on-primary-fixed": "#23005c",
+                        "secondary": "#4cd7f6",
+                        "tertiary": "#ffafd3",
+                        "on-primary": "#3c0091",
+                        "surface-bright": "#31394d",
+                        "on-background": "#dae2fd",
+                        "surface-container-low": "#131b2e",
+                        "on-error-container": "#ffdad6",
+                        "outline-variant": "#494454",
+                        "inverse-on-surface": "#283044",
+                        "inverse-primary": "#6d3bd7",
+                        "background": "#0b1326",
+                        "tertiary-fixed": "#ffd8e7",
+                        "on-tertiary-container": "#560038",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "on-surface": "#dae2fd",
+                        "primary-container": "#a078ff",
+                        "on-secondary-container": "#00424e",
+                        "surface-container-high": "#222a3d",
+                        "surface-dim": "#0b1326",
+                        "inverse-surface": "#dae2fd",
+                        "tertiary-container": "#e364a7",
+                        "surface-container": "#171f33",
+                        "surface-tint": "#d0bcff",
+                        "on-primary-fixed-variant": "#5516be",
+                        "outline": "#958ea0",
+                        "primary": "#d0bcff",
+                        "on-surface-variant": "#cbc3d7",
+                        "surface-container-highest": "#2d3449",
+                        "on-tertiary-fixed-variant": "#85145a",
+                        "on-tertiary-fixed": "#3d0026",
+                        "on-secondary": "#003640",
+                        "on-primary-container": "#340080",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "surface-variant": "#2d3449",
+                        "surface-container-lowest": "#060e20",
+                        "primary-fixed": "#e9ddff",
+                        "error": "#ffb4ab",
+                        "error-container": "#93000a",
+                        "tertiary-fixed-dim": "#ffafd3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-margin": "3rem",
+                        "unit": "8px",
+                        "gutter": "1.5rem",
+                        "card-gap": "1rem",
+                        "container-padding": "2rem"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Geist"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-md": ["Geist"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/70 backdrop-blur-md border-b border-white/10 shadow-sm flex justify-between items-center px-gutter h-16 w-full">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center overflow-hidden">
+<img alt="Adjudicator Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a health insurance adjudicator in a modern digital avatar style. The character is wearing professional attire and glasses, set against a blurred background of a high-tech medical office. The color palette is dominated by deep blues and purples, matching a premium dark-mode dashboard aesthetic with soft, directional lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCj1eF0AeR0epWuo8O0em_lQUpItiDkY7WWLusCXVwYcW0fSfCtR46IjxKOK7y5Nq3PIeoKFYXr9s6sLVGXp1yNQt6dTabJnvMuCcsT0d_GJrdEW4ASW8xhRzmFilZFvdq1Mg3q35skFWel2TtFHiOQ30eKI_Hk92aU8OcoYEeYvejouFZfnEC4iXBe2ehu4yt9VvVZV4y8mUCieoFBvAssCwnO5ennCY8IepcFc_Q01ZQ86Bm4OsSmzUYW-6I2IUaRfwbuc7rNQOc"/>
+</div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">ClaimsCommand</h1>
+</div>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-6 py-2 rounded-xl active:scale-95 transition-transform hover:shadow-[0_0_15px_rgba(208,188,255,0.4)]">
+            New Claim
+        </button>
+</header>
+<main class="pt-24 pb-32 px-4 md:px-8 max-w-[1600px] mx-auto">
+<!-- Stats Row (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+<div class="glass-panel p-6 rounded-2xl flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-outline uppercase">Active Queue</span>
+<span class="font-display-lg text-display-lg text-primary">1,284</span>
+<div class="flex items-center gap-1 text-secondary text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span>12% from yesterday</span>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-outline uppercase">Approved Rate</span>
+<span class="font-display-lg text-display-lg text-secondary">94.2%</span>
+<div class="w-full bg-white/5 h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-secondary h-full rounded-full w-[94.2%]"></div>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-outline uppercase">Avg Processing</span>
+<span class="font-display-lg text-display-lg text-tertiary">1.4<span class="text-headline-md">hrs</span></span>
+<span class="font-label-sm text-label-sm text-outline">Target: < 2hrs</span>
+</div>
+<div class="glass-panel p-6 rounded-2xl flex flex-col gap-2 bg-gradient-to-br from-primary/10 to-transparent">
+<span class="font-label-sm text-label-sm text-outline uppercase">Priority Review</span>
+<span class="font-display-lg text-display-lg text-error">42</span>
+<button class="mt-auto font-label-sm text-label-sm text-primary flex items-center gap-1 hover:underline">
+                    View Urgent <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Claims Table Container -->
+<div class="glass-panel rounded-3xl overflow-hidden shadow-2xl">
+<div class="p-6 border-b border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div class="flex flex-col">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Recent Claims</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Manage and adjudicate incoming health service requests.</p>
+</div>
+<div class="flex gap-2 w-full md:w-auto">
+<div class="relative flex-1 md:w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-xl pl-10 pr-4 py-2 text-on-surface placeholder:text-outline focus:ring-1 focus:ring-primary" placeholder="Search claims..." type="text"/>
+</div>
+<button class="bg-surface-container-high p-2.5 rounded-xl border border-white/5 hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-outline">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Table Layout -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-white/5">
+<th class="px-6 py-4 font-label-sm text-label-sm text-outline uppercase tracking-wider">Claim ID</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-outline uppercase tracking-wider">Patient Name</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-outline uppercase tracking-wider">Date</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-outline uppercase tracking-wider text-center">Status</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-outline uppercase tracking-wider text-right">Amount</th>
+<th class="px-6 py-4"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<!-- Row 1 -->
+<tr class="row-hover-effect transition-all duration-300 cursor-pointer">
+<td class="px-6 py-5 font-body-md text-body-md text-primary font-bold">#8821</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-highest flex items-center justify-center font-bold text-primary-fixed-dim">EV</div>
+<span class="font-label-md text-label-md text-on-surface">Elena Vance</span>
+</div>
+</td>
+<td class="px-6 py-5 font-body-md text-body-md text-on-surface-variant">Oct 24, 2023</td>
+<td class="px-6 py-5 text-center">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shadow-[0_0_10px_rgba(52,211,153,0.2)]">Approved</span>
+</td>
+<td class="px-6 py-5 font-body-md text-body-md text-right font-semibold">$1,240.00</td>
+<td class="px-6 py-5 text-right">
+<span class="material-symbols-outlined text-outline hover:text-primary">more_vert</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="row-hover-effect transition-all duration-300 cursor-pointer">
+<td class="px-6 py-5 font-body-md text-body-md text-primary font-bold">#8819</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-highest flex items-center justify-center font-bold text-secondary">MH</div>
+<span class="font-label-md text-label-md text-on-surface">Mark Halperin</span>
+</div>
+</td>
+<td class="px-6 py-5 font-body-md text-body-md text-on-surface-variant">Oct 23, 2023</td>
+<td class="px-6 py-5 text-center">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest bg-red-500/20 text-red-400 border border-red-500/30 shadow-[0_0_10px_rgba(248,113,113,0.2)]">Rejected</span>
+</td>
+<td class="px-6 py-5 font-body-md text-body-md text-right font-semibold">$3,450.00</td>
+<td class="px-6 py-5 text-right">
+<span class="material-symbols-outlined text-outline hover:text-primary">more_vert</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="row-hover-effect transition-all duration-300 cursor-pointer">
+<td class="px-6 py-5 font-body-md text-body-md text-primary font-bold">#8815</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-highest flex items-center justify-center font-bold text-tertiary">IK</div>
+<span class="font-label-md text-label-md text-on-surface">Irving Keiller</span>
+</div>
+</td>
+<td class="px-6 py-5 font-body-md text-body-md text-on-surface-variant">Oct 23, 2023</td>
+<td class="px-6 py-5 text-center">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-[0_0_10px_rgba(251,191,36,0.2)]">Manual Review</span>
+</td>
+<td class="px-6 py-5 font-body-md text-body-md text-right font-semibold">$890.40</td>
+<td class="px-6 py-5 text-right">
+<span class="material-symbols-outlined text-outline hover:text-primary">more_vert</span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="row-hover-effect transition-all duration-300 cursor-pointer">
+<td class="px-6 py-5 font-body-md text-body-md text-primary font-bold">#8812</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-highest flex items-center justify-center font-bold text-primary">SC</div>
+<span class="font-label-md text-label-md text-on-surface">Sondra Casey</span>
+</div>
+</td>
+<td class="px-6 py-5 font-body-md text-body-md text-on-surface-variant">Oct 22, 2023</td>
+<td class="px-6 py-5 text-center">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shadow-[0_0_10px_rgba(52,211,153,0.2)]">Approved</span>
+</td>
+<td class="px-6 py-5 font-body-md text-body-md text-right font-semibold">$2,110.00</td>
+<td class="px-6 py-5 text-right">
+<span class="material-symbols-outlined text-outline hover:text-primary">more_vert</span>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="row-hover-effect transition-all duration-300 cursor-pointer">
+<td class="px-6 py-5 font-body-md text-body-md text-primary font-bold">#8809</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-highest flex items-center justify-center font-bold text-secondary">DL</div>
+<span class="font-label-md text-label-md text-on-surface">Dylan Lawrence</span>
+</div>
+</td>
+<td class="px-6 py-5 font-body-md text-body-md text-on-surface-variant">Oct 21, 2023</td>
+<td class="px-6 py-5 text-center">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-[0_0_10px_rgba(251,191,36,0.2)]">Manual Review</span>
+</td>
+<td class="px-6 py-5 font-body-md text-body-md text-right font-semibold">$450.00</td>
+<td class="px-6 py-5 text-right">
+<span class="material-symbols-outlined text-outline hover:text-primary">more_vert</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-6 flex items-center justify-between bg-white/5">
+<span class="font-label-sm text-label-sm text-outline">Showing 5 of 1,284 claims</span>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg bg-surface-container hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-on-surface">chevron_left</span>
+</button>
+<button class="p-2 rounded-lg bg-surface-container hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-on-surface">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center py-2 px-4 bg-surface/80 backdrop-blur-xl border-t border-white/10 shadow-[0_-4px_20px_rgba(0,0,0,0.3)] z-50 rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-outline hover:text-primary active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container/30 text-secondary rounded-xl px-3 py-1 active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-weight="fill">description</span>
+<span class="font-label-sm text-label-sm">Claims</span>
+</a>
+<a class="flex flex-col items-center justify-center text-outline hover:text-primary active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-sm text-label-sm">Patients</span>
+</a>
+<a class="flex flex-col items-center justify-center text-outline hover:text-primary active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-sm text-label-sm">Analytics</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for table rows
+        document.querySelectorAll('.row-hover-effect').forEach(row => {
+            row.addEventListener('click', () => {
+                row.classList.add('scale-95');
+                setTimeout(() => {
+                    row.classList.remove('scale-95');
+                }, 150);
+            });
+        });
+
+        // Search bar focus effects
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary/50');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary/50');
+        });
+    </script>
+</body></html>

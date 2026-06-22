@@ -1,12 +1,3 @@
-from IPython.utils import contexts
-from IPython.utils import contexts
-from IPython.utils import contexts
-from IPython.utils import contexts
-from IPython.utils import contexts
-from IPython.utils import contexts
-from IPython.utils import contexts
-from IPython.utils import contexts
-from IPython.utils import contexts
 from .base import BaseAgent
 from ..models import (
     AgentResult, ClaimSubmission, PolicyConfig,
@@ -57,10 +48,10 @@ class SemanticFraudAgent(BaseAgent):
         if not settings.MOCK_EXTRACTION:
             return self._run_llm_analysis(claim, extracted_data, context)
         
-        return self._run_deterministic_analysis(claim, extracted_data, policy)
+        return self._run_deterministic_analysis(claim, extracted_data, policy, context)
     
     def _run_deterministic_analysis(
-        self, claim: ClaimSubmission, extracted_data: dict, policy: PolicyConfig
+        self, claim: ClaimSubmission, extracted_data: dict, policy: PolicyConfig, context: dict
     ) -> AgentResult:
         """Mock-mode deterministic fraud analysis using rules."""
         flags = []

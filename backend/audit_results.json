@@ -1,0 +1,493 @@
+{
+  "timestamp": "2026-06-22T11:28:21.337100",
+  "summary": {
+    "total": 73,
+    "passed": 70,
+    "failed": 3,
+    "pass_rate": 95.9
+  },
+  "phases": {
+    "phase0_structural": {
+      "total": 23,
+      "passed": 23,
+      "failed": 0
+    },
+    "phase1_api_security": {
+      "total": 10,
+      "passed": 10,
+      "failed": 0
+    },
+    "phase2_business_logic": {
+      "total": 17,
+      "passed": 17,
+      "failed": 0
+    },
+    "phase3_input_validation": {
+      "total": 9,
+      "passed": 8,
+      "failed": 1
+    },
+    "phase4_stress": {
+      "total": 5,
+      "passed": 4,
+      "failed": 1
+    },
+    "phase5_error_handling": {
+      "total": 9,
+      "passed": 8,
+      "failed": 1
+    }
+  },
+  "details": {
+    "phase0_structural": [
+      {
+        "test": "ADR-001: Supervisor agent exists",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.598979"
+      },
+      {
+        "test": "Agent file: document_verification.py",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.598979"
+      },
+      {
+        "test": "Agent file: document_extraction.py",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.598979"
+      },
+      {
+        "test": "Agent file: fraud_detector.py",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.598979"
+      },
+      {
+        "test": "Agent file: decision.py",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.598979"
+      },
+      {
+        "test": "Agent file: planner.py",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.598979"
+      },
+      {
+        "test": "Agent file: semantic_fraud.py",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.598979"
+      },
+      {
+        "test": "Agent file: case_summary.py",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.598979"
+      },
+      {
+        "test": "ADR-002: PolicyEngine exists (deterministic)",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.598979"
+      },
+      {
+        "test": "PolicyLoader reads from JSON",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.598979"
+      },
+      {
+        "test": "ADR-003: Pydantic models.py",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.598979"
+      },
+      {
+        "test": "ADR-004: Confidence scoring with floor(0.15)",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.598979"
+      },
+      {
+        "test": "ADR-005: SQLite+SQLAlchemy persistence",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.602495"
+      },
+      {
+        "test": "ADR-006: React+Vite frontend",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.602495"
+      },
+      {
+        "test": "State: PLANNING defined",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.602495"
+      },
+      {
+        "test": "State: VERIFYING defined",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.602495"
+      },
+      {
+        "test": "State: EXTRACTING defined",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.602495"
+      },
+      {
+        "test": "State: ADJUDICATING defined",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.602495"
+      },
+      {
+        "test": "State: FRAUD_CHECKING defined",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.602495"
+      },
+      {
+        "test": "State: DECIDING defined",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.602495"
+      },
+      {
+        "test": "State: DONE defined",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.602495"
+      },
+      {
+        "test": "Test: test_policy_engine.py exists",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.602495"
+      },
+      {
+        "test": "Test: test_integration.py exists",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:48.602495"
+      }
+    ],
+    "phase1_api_security": [
+      {
+        "test": "OpenAPI /docs accessible",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:23:50.676965"
+      },
+      {
+        "test": "No API key \u2192 403",
+        "passed": true,
+        "detail": "Got 403",
+        "timestamp": "2026-06-22T11:23:52.753529"
+      },
+      {
+        "test": "Wrong API key \u2192 403",
+        "passed": true,
+        "detail": "Got 403",
+        "timestamp": "2026-06-22T11:23:54.816864"
+      },
+      {
+        "test": "Valid API key \u2192 200",
+        "passed": true,
+        "detail": "Got 200",
+        "timestamp": "2026-06-22T11:23:56.907572"
+      },
+      {
+        "test": "CORS allows localhost:5173",
+        "passed": true,
+        "detail": "Header: http://localhost:5173",
+        "timestamp": "2026-06-22T11:23:58.940278"
+      },
+      {
+        "test": "CORS blocks unknown origin",
+        "passed": true,
+        "detail": "Header: ",
+        "timestamp": "2026-06-22T11:24:00.985084"
+      },
+      {
+        "test": "Unknown route \u2192 404",
+        "passed": true,
+        "detail": "Got 404",
+        "timestamp": "2026-06-22T11:24:03.037765"
+      },
+      {
+        "test": "Non-existent claim \u2192 404",
+        "passed": true,
+        "detail": "Got 404",
+        "timestamp": "2026-06-22T11:24:05.111252"
+      },
+      {
+        "test": "No dangerous server header",
+        "passed": true,
+        "detail": "Server: uvicorn",
+        "timestamp": "2026-06-22T11:24:07.162661"
+      },
+      {
+        "test": "POST with bad body \u2192 422",
+        "passed": true,
+        "detail": "Got 422",
+        "timestamp": "2026-06-22T11:24:09.213546"
+      }
+    ],
+    "phase2_business_logic": [
+      {
+        "test": "TC001: Wrong Document Uploaded",
+        "passed": true,
+        "detail": "Decision=None, Amount=None",
+        "timestamp": "2026-06-22T11:24:10.276188"
+      },
+      {
+        "test": "TC002: Unreadable Document",
+        "passed": true,
+        "detail": "Decision=None, Amount=None",
+        "timestamp": "2026-06-22T11:24:10.276188"
+      },
+      {
+        "test": "TC003: Documents Belong to Different Patients",
+        "passed": true,
+        "detail": "Decision=None, Amount=None",
+        "timestamp": "2026-06-22T11:24:10.276188"
+      },
+      {
+        "test": "TC004: Clean Consultation \u2014 Full Approval",
+        "passed": true,
+        "detail": "Decision=APPROVED, Amount=1350.0",
+        "timestamp": "2026-06-22T11:24:10.283943"
+      },
+      {
+        "test": "TC005: Waiting Period \u2014 Diabetes",
+        "passed": true,
+        "detail": "Decision=REJECTED, Amount=None",
+        "timestamp": "2026-06-22T11:24:10.283943"
+      },
+      {
+        "test": "TC006: Dental Partial Approval \u2014 Cosmetic Exclusion",
+        "passed": true,
+        "detail": "Decision=PARTIAL, Amount=8000.0",
+        "timestamp": "2026-06-22T11:24:10.283943"
+      },
+      {
+        "test": "TC007: MRI Without Pre-Authorization",
+        "passed": true,
+        "detail": "Decision=REJECTED, Amount=None",
+        "timestamp": "2026-06-22T11:24:10.283943"
+      },
+      {
+        "test": "TC008: Per-Claim Limit Exceeded",
+        "passed": true,
+        "detail": "Decision=REJECTED, Amount=None",
+        "timestamp": "2026-06-22T11:24:10.283943"
+      },
+      {
+        "test": "TC009: Fraud Signal \u2014 Multiple Same-Day Claims",
+        "passed": true,
+        "detail": "Decision=MANUAL_REVIEW, Amount=None",
+        "timestamp": "2026-06-22T11:24:10.287567"
+      },
+      {
+        "test": "TC010: Network Hospital \u2014 Discount Applied",
+        "passed": true,
+        "detail": "Decision=APPROVED, Amount=3240.0",
+        "timestamp": "2026-06-22T11:24:10.287567"
+      },
+      {
+        "test": "TC011: Component Failure \u2014 Graceful Degradation",
+        "passed": true,
+        "detail": "Decision=APPROVED, Amount=4000.0",
+        "timestamp": "2026-06-22T11:24:10.287567"
+      },
+      {
+        "test": "TC012: Excluded Treatment",
+        "passed": true,
+        "detail": "Decision=REJECTED, Amount=None",
+        "timestamp": "2026-06-22T11:24:10.287567"
+      },
+      {
+        "test": "TC013: Dependent Claim \u2014 Family Floater",
+        "passed": true,
+        "detail": "Decision=APPROVED, Amount=900.0",
+        "timestamp": "2026-06-22T11:24:10.287567"
+      },
+      {
+        "test": "TC014: Pharmacy \u2014 Branded Drug Copay",
+        "passed": true,
+        "detail": "Decision=APPROVED, Amount=1400.0",
+        "timestamp": "2026-06-22T11:24:10.287567"
+      },
+      {
+        "test": "TC015: Vision \u2014 Mixed Coverage (LASIK + Eye Exam)",
+        "passed": true,
+        "detail": "Decision=PARTIAL, Amount=2000.0",
+        "timestamp": "2026-06-22T11:24:10.292119"
+      },
+      {
+        "test": "TC016: Maternity During Waiting Period",
+        "passed": true,
+        "detail": "Decision=REJECTED, Amount=None",
+        "timestamp": "2026-06-22T11:24:10.292119"
+      },
+      {
+        "test": "TC017: Alternative Medicine \u2014 Limit Exceeded",
+        "passed": true,
+        "detail": "Decision=REJECTED, Amount=None",
+        "timestamp": "2026-06-22T11:24:10.293127"
+      }
+    ],
+    "phase3_input_validation": [
+      {
+        "test": "SQL injection in member_id \u2192 no crash",
+        "passed": true,
+        "detail": "Status: 200",
+        "timestamp": "2026-06-22T11:24:12.404508"
+      },
+      {
+        "test": "XSS in member_id \u2192 no reflection",
+        "passed": true,
+        "detail": "Status: 200",
+        "timestamp": "2026-06-22T11:24:14.503044"
+      },
+      {
+        "test": "Invalid category \u2192 422",
+        "passed": false,
+        "detail": "Status: 500",
+        "timestamp": "2026-06-22T11:24:16.970400"
+      },
+      {
+        "test": "Negative amount \u2192 handled",
+        "passed": true,
+        "detail": "Status: 200",
+        "timestamp": "2026-06-22T11:24:19.074337"
+      },
+      {
+        "test": "Zero amount \u2192 handled",
+        "passed": true,
+        "detail": "Status: 200",
+        "timestamp": "2026-06-22T11:24:21.213039"
+      },
+      {
+        "test": "Huge amount \u2192 handled",
+        "passed": true,
+        "detail": "Status: 200",
+        "timestamp": "2026-06-22T11:24:23.302081"
+      },
+      {
+        "test": "Missing fields \u2192 422",
+        "passed": true,
+        "detail": "Status: 422",
+        "timestamp": "2026-06-22T11:24:25.342861"
+      },
+      {
+        "test": "Path traversal \u2192 blocked",
+        "passed": true,
+        "detail": "Status: 404",
+        "timestamp": "2026-06-22T11:24:27.409390"
+      },
+      {
+        "test": "10MB file upload \u2192 handled",
+        "passed": true,
+        "detail": "Status: 200",
+        "timestamp": "2026-06-22T11:24:29.969911"
+      }
+    ],
+    "phase4_stress": [
+      {
+        "test": "Sequential 10 requests \u2192 10/10 success",
+        "passed": true,
+        "detail": "Avg latency: 2.12s",
+        "timestamp": "2026-06-22T11:24:51.181774"
+      },
+      {
+        "test": "Avg response time < 5s",
+        "passed": true,
+        "detail": "Avg: 2.12s",
+        "timestamp": "2026-06-22T11:24:51.181774"
+      },
+      {
+        "test": "Concurrent 20 requests \u2192 20/20 success",
+        "passed": true,
+        "detail": "Total: 3.19s, Avg: 2.83s",
+        "timestamp": "2026-06-22T11:24:54.373559"
+      },
+      {
+        "test": "No 500 errors under load",
+        "passed": true,
+        "detail": "Statuses: {200}",
+        "timestamp": "2026-06-22T11:24:54.373559"
+      },
+      {
+        "test": "GET 50 rapid queries \u2192 15/50 success",
+        "passed": false,
+        "detail": "Avg: 2.057s",
+        "timestamp": "2026-06-22T11:28:17.299007"
+      }
+    ],
+    "phase5_error_handling": [
+      {
+        "test": "TC011: Graceful degradation \u2192 no crash",
+        "passed": true,
+        "detail": "",
+        "timestamp": "2026-06-22T11:28:17.299628"
+      },
+      {
+        "test": "TC011: Returns a decision",
+        "passed": true,
+        "detail": "Decision: APPROVED",
+        "timestamp": "2026-06-22T11:28:17.299628"
+      },
+      {
+        "test": "TC011: Confidence reduced",
+        "passed": true,
+        "detail": "Confidence: 0.8",
+        "timestamp": "2026-06-22T11:28:17.299628"
+      },
+      {
+        "test": "Unknown member \u2192 MEMBER_NOT_FOUND",
+        "passed": true,
+        "detail": "Reasons: ['MEMBER_NOT_FOUND']",
+        "timestamp": "2026-06-22T11:28:17.299628"
+      },
+      {
+        "test": "Empty documents \u2192 handled",
+        "passed": true,
+        "detail": "Decision: None",
+        "timestamp": "2026-06-22T11:28:17.299628"
+      },
+      {
+        "test": "DEP001: Dependent claim \u2192 APPROVED",
+        "passed": true,
+        "detail": "Decision: APPROVED",
+        "timestamp": "2026-06-22T11:28:17.299628"
+      },
+      {
+        "test": "DEP001: Amount \u20b9900 (10% copay)",
+        "passed": true,
+        "detail": "Amount: 900.0",
+        "timestamp": "2026-06-22T11:28:17.299628"
+      },
+      {
+        "test": "TC009: Fraud \u2192 MANUAL_REVIEW",
+        "passed": true,
+        "detail": "Decision: MANUAL_REVIEW",
+        "timestamp": "2026-06-22T11:28:17.299628"
+      },
+      {
+        "test": "API healthcheck",
+        "passed": false,
+        "detail": "HTTPConnectionPool(host='localhost', port=8000): Max retries exceeded with url: /v1/claims (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001FCEC973320>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))",
+        "timestamp": "2026-06-22T11:28:21.335324"
+      }
+    ]
+  }
+}

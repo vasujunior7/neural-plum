@@ -67,7 +67,13 @@ async def submit_claim(
         approved_amount=output.get("approved_amount"),
         rejection_reasons=output.get("rejection_reasons"),
         notes=output.get("notes"),
-        confidence=output.get("confidence")
+        confidence=output.get("confidence"),
+        rationale=output.get("rationale"),
+        field_confidences=output.get("field_confidences"),
+        semantic_fraud_result=output.get("semantic_fraud_result"),
+        claim_plan=output.get("claim_plan"),
+        human_summary=output.get("human_summary"),
+        handler_checklist=output.get("handler_checklist"),
     )
     db.add(db_claim)
     db.commit()
@@ -84,7 +90,13 @@ async def submit_claim(
         "rejection_reasons": output.get("rejection_reasons"),
         "notes": output.get("notes"),
         "confidence": output.get("confidence"),
-        "traces": output.get("traces")
+        "traces": output.get("traces"),
+        "rationale": output.get("rationale", []),
+        "field_confidences": output.get("field_confidences", {}),
+        "semantic_fraud_result": output.get("semantic_fraud_result", {}),
+        "claim_plan": output.get("claim_plan", {}),
+        "human_summary": output.get("human_summary", ""),
+        "handler_checklist": output.get("handler_checklist"),
     }
 
 @router.get("/{claim_id}")
@@ -133,7 +145,13 @@ def get_claim(claim_id: int, db: Session = Depends(get_db), api_key: str = Secur
         "confidence": claim.confidence,
         "reason": reason,
         "trace": trace_list,
-        "extracted_data": {}
+        "extracted_data": {},
+        "rationale": claim.rationale or [],
+        "field_confidences": claim.field_confidences or {},
+        "semantic_fraud_result": claim.semantic_fraud_result or {},
+        "claim_plan": claim.claim_plan or {},
+        "human_summary": claim.human_summary or "",
+        "handler_checklist": claim.handler_checklist,
     }
 
 @router.get("")
@@ -160,3 +178,4 @@ def delete_all_claims(db: Session = Depends(get_db), api_key: str = Security(ver
     db.query(DBClaim).delete()
     db.commit()
     return {"message": "All claims deleted successfully"}
+

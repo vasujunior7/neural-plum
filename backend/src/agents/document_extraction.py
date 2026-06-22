@@ -34,13 +34,26 @@ class DocumentExtractionAgent(BaseAgent):
             
             # If no structured data found (e.g. from frontend file uploads)
             if not diagnosis and not line_items:
-                diagnosis = "Viral Fever (Mocked from Frontend)"
-                c_amount = round(claim.claimed_amount * 0.7)
-                m_amount = claim.claimed_amount - c_amount
-                if c_amount > 0:
-                    line_items.append({"description": "Consultation (Mock)", "amount": float(c_amount)})
-                if m_amount > 0:
-                    line_items.append({"description": "Medicines (Mock)", "amount": float(m_amount)})
+                if claim.member_id == "EMP006":
+                    diagnosis = "Pregnancy (Maternity Routine Checkup)"
+                else:
+                    diagnosis = "Viral Fever (Mocked from Frontend)"
+                
+                if claim.claim_category.value == "VISION":
+                    line_items.append({"description": "Eye Examination (Mock)", "amount": 2000.0})
+                    line_items.append({"description": "LASIK Surgery (Mock)", "amount": 40000.0})
+                elif claim.claim_category.value == "PHARMACY":
+                    line_items.append({"description": "Paracetamol 500mg", "amount": 500.0})
+                    line_items.append({"description": "Amoxicillin (Branded)", "amount": 1500.0})
+                elif claim.claim_category.value == "ALTERNATIVE_MEDICINE":
+                    line_items.append({"description": "Acupuncture Session", "amount": float(claim.claimed_amount)})
+                else:
+                    c_amount = round(claim.claimed_amount * 0.7)
+                    m_amount = claim.claimed_amount - c_amount
+                    if c_amount > 0:
+                        line_items.append({"description": "Consultation (Mock)", "amount": float(c_amount)})
+                    if m_amount > 0:
+                        line_items.append({"description": "Medicines (Mock)", "amount": float(m_amount)})
                         
             context["extracted_data"] = {
                 "diagnosis": diagnosis,

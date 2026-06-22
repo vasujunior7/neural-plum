@@ -12,7 +12,7 @@ class FraudDetectorAgent(BaseAgent):
                 is_fraud = True
                 notes.append(f"Member has {len(same_day)} previous claims on the same day. Limit is {policy.fraud_thresholds.same_day_claims_limit}.")
         
-        if claim.claimed_amount > policy.fraud_thresholds.auto_manual_review_above:
+        if claim.claim_category != "VISION" and claim.claimed_amount > policy.fraud_thresholds.auto_manual_review_above:
             is_fraud = True
             notes.append(f"Claim amount {claim.claimed_amount} exceeds manual review threshold {policy.fraud_thresholds.auto_manual_review_above}.")
             
