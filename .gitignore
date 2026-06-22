@@ -49,3 +49,5 @@ htmlcov/
 
 # Langfuse / Traces
 *.log
+
+backend/.env
