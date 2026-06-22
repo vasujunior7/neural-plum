@@ -267,7 +267,6 @@ export function ClaimDetail() {
                 {claim.trace && claim.trace.map((step: any, index: number) => {
                   const isPass = step.status === 'PASS'
                   const isFail = step.status === 'FAIL'
-                  const isInfo = !isPass && !isFail
                   
                   return (
                     <motion.div 
