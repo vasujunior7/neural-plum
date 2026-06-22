@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8000/v1"
+const API_BASE = "https://vasiuuu-neural-plum-app.hf.space/v1"
 const API_KEY = "super-secret-plum-key"
 
 export async function fetchClaims() {

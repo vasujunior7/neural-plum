@@ -61,7 +61,7 @@ export function Sidebar() {
         <button 
           onClick={async () => {
             if(window.confirm('Are you sure you want to delete all claims?')) {
-              await fetch('http://localhost:8000/v1/claims', {
+              await fetch('https://vasiuuu-neural-plum-app.hf.space/v1/claims', {
                 method: 'DELETE',
                 headers: { 'X-API-Key': 'super-secret-plum-key' }
               });
