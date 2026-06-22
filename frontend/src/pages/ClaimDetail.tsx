@@ -5,16 +5,24 @@ import { Card } from "../components/ui/Card"
 import { Badge } from "../components/ui/Badge"
 import { Button } from "../components/ui/Button"
 import { fetchClaim } from "../utils/api"
-import { ArrowLeft, FileText, Activity, ShieldAlert, CheckCircle, XCircle, AlertCircle, Zap, Brain, ClipboardCheck, Eye, AlertTriangle, Shield, ChevronDown, ChevronUp } from "lucide-react"
+import { 
+  ArrowLeft, FileText, Activity, ShieldAlert, CheckCircle, 
+  XCircle, AlertCircle, Zap, Brain, ClipboardCheck, 
+  MessageSquare, Shield, ChevronDown, ChevronUp 
+} from "lucide-react"
 
 function ConfidenceBadge({ confidence }: { confidence: number }) {
   const pct = Math.round(confidence * 100)
-  const color = confidence >= 0.8 ? 'text-status-success' : confidence >= 0.6 ? 'text-yellow-500' : 'text-status-error'
-  const bg = confidence >= 0.8 ? 'bg-emerald-50' : confidence >= 0.6 ? 'bg-yellow-50' : 'bg-red-50'
-  const icon = confidence >= 0.8 ? <CheckCircle size={12} /> : confidence >= 0.6 ? <AlertTriangle size={12} /> : <XCircle size={12} />
+  const isHigh = confidence >= 0.8
+  const isMed = confidence >= 0.6
+  
   return (
-    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-mono font-medium ${color} ${bg}`}>
-      {icon} {pct}%
+    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono font-medium ${
+      isHigh ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' : 
+      isMed ? 'text-amber-700 bg-amber-50 border border-amber-200' : 
+      'text-red-700 bg-red-50 border border-red-200'
+    }`}>
+      {pct}%
     </span>
   )
 }
@@ -25,9 +33,10 @@ export function ClaimDetail() {
   const [claim, setClaim] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  
+  // Accordion states
   const [rationaleOpen, setRationaleOpen] = useState(false)
   const [fraudOpen, setFraudOpen] = useState(false)
-  const [checklistOpen, setChecklistOpen] = useState(true)
 
   useEffect(() => {
     const loadClaim = async () => {
@@ -44,17 +53,24 @@ export function ClaimDetail() {
   }, [id])
 
   if (loading) {
-    return <div className="flex justify-center p-12 text-primary">Loading...</div>
+    return (
+      <div className="flex h-[50vh] items-center justify-center">
+        <div className="animate-pulse flex flex-col items-center gap-4">
+          <div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+          <p className="text-sm text-text-muted">Loading claim record...</p>
+        </div>
+      </div>
+    )
   }
 
   if (error || !claim) {
     return (
-      <div className="max-w-3xl mx-auto p-8">
-        <Card className="text-center space-y-4 p-8">
-          <ShieldAlert size={48} className="mx-auto text-status-error" />
-          <h2 className="text-xl font-bold text-status-error">Error Loading Claim</h2>
-          <p className="text-text-secondary">{error}</p>
-          <Button onClick={() => navigate('/')} variant="outline">Return to Dashboard</Button>
+      <div className="max-w-2xl mx-auto mt-12 p-6">
+        <Card className="text-center p-12 border-red-100 bg-red-50/30">
+          <ShieldAlert size={32} className="mx-auto text-red-500 mb-4" />
+          <h2 className="text-lg font-semibold text-gray-900 mb-2">Record Not Found</h2>
+          <p className="text-sm text-gray-500 mb-6">{error || 'The requested claim could not be retrieved.'}</p>
+          <Button onClick={() => navigate('/')} variant="outline" className="bg-white">Return to Dashboard</Button>
         </Card>
       </div>
     )
@@ -67,18 +83,22 @@ export function ClaimDetail() {
   const handlerChecklist = claim.handler_checklist
 
   return (
-    <div className="max-w-5xl mx-auto p-4 md:p-8 space-y-6">
+    <div className="max-w-[1100px] mx-auto p-4 md:p-8 space-y-8 animate-in fade-in duration-500">
+      
+      {/* Header */}
       <header className="flex flex-col gap-4">
         <button 
           onClick={() => navigate('/')} 
-          className="flex items-center gap-2 text-text-secondary hover:text-primary transition-colors text-sm w-fit"
+          className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors text-sm w-fit group"
         >
-          <ArrowLeft size={16} /> Back to Command Center
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> 
+          Back to Command Center
         </button>
-        <div className="flex justify-between items-end border-b border-border pb-4">
+        
+        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-border pb-6 gap-4">
           <div>
-            <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-3xl font-bold text-primary tracking-tight">Claim #{claim.id}</h1>
+            <div className="flex items-center gap-3 mb-1">
+              <h1 className="text-2xl font-bold text-gray-900">Claim #{claim.id}</h1>
               <Badge variant={
                 claim.decision === 'APPROVED' ? 'success' : 
                 claim.decision === 'REJECTED' ? 'error' : 
@@ -86,298 +106,277 @@ export function ClaimDetail() {
               }>
                 {claim.decision ? claim.decision.replace('_', ' ') : claim.status}
               </Badge>
+              {claimPlan.fast_track && (
+                <Badge className="bg-blue-50 text-blue-700 border-blue-200">
+                  <Zap size={10} className="mr-1" /> Fast Tracked
+                </Badge>
+              )}
             </div>
-            <p className="text-text-secondary text-sm">Patient: {claim.member_id} • {claim.claim_category}</p>
+            <p className="text-sm text-gray-500">Patient: <span className="font-medium text-gray-700">{claim.member_id}</span> • {claim.claim_category}</p>
           </div>
-          <div className="text-right">
-            <p className="text-sm text-text-muted">Confidence</p>
-            <p className="text-2xl font-mono text-primary font-bold">
-              {claim.confidence !== undefined && claim.confidence !== null ? `${(claim.confidence * 100).toFixed(1)}%` : '-'}
-            </p>
+          
+          <div className="flex items-center gap-6 text-right">
+            <div>
+              <p className="text-[11px] font-medium text-gray-400 uppercase tracking-wider mb-1">AI Confidence</p>
+              <p className="text-2xl font-mono text-gray-900">
+                {claim.confidence !== undefined && claim.confidence !== null ? `${(claim.confidence * 100).toFixed(1)}%` : '-'}
+              </p>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Phase 4: Claim Classification Banner */}
-      {claimPlan.claim_category && (
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-          <Card className="p-4" style={{ background: 'linear-gradient(135deg, #f0f9ff 0%, #e8f4fd 100%)' }}>
-            <div className="flex items-center justify-between flex-wrap gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Brain size={20} className="text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs text-text-muted uppercase tracking-wider font-semibold">Claim Classification</p>
-                  <p className="text-sm font-bold text-text-primary">{claimPlan.claim_category}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                {claimPlan.fast_track && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700">
-                    <Zap size={12} /> Fast Track
-                  </span>
-                )}
-                <div className="text-center">
-                  <p className="text-xs text-text-muted">Complexity</p>
-                  <p className="text-sm font-mono font-bold text-primary">{((claimPlan.complexity_score || 0) * 100).toFixed(0)}%</p>
-                </div>
-                {claimPlan.agents_to_skip && Object.keys(claimPlan.agents_to_skip).length > 0 && (
-                  <div className="text-xs text-text-secondary">
-                    <p className="font-semibold text-text-muted">Skipped:</p>
-                    {Object.entries(claimPlan.agents_to_skip).map(([agent, reason]: [string, any]) => (
-                      <p key={agent} className="truncate max-w-[200px]" title={String(reason)}>{agent}: {String(reason)}</p>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </Card>
-        </motion.div>
-      )}
-
-      {/* Phase 5: Claimant Summary Card */}
-      {claim.human_summary && (
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          <Card className="p-5 border-l-4" style={{ borderLeftColor: claim.decision === 'APPROVED' ? '#10b981' : claim.decision === 'REJECTED' ? '#ef4444' : claim.decision === 'MANUAL_REVIEW' ? '#f59e0b' : '#6366f1' }}>
-            <h3 className="text-sm font-semibold text-primary flex items-center gap-2 mb-3">
-              <Eye size={16} /> Summary for Claimant
-            </h3>
-            <div className="text-sm text-text-primary leading-relaxed whitespace-pre-line">
-              {claim.human_summary}
-            </div>
-          </Card>
-        </motion.div>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Main Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        {/* Left Column: Details, Confidence & Extracted Info */}
-        <div className="md:col-span-1 space-y-6">
-          <Card className="space-y-4 p-5">
-            <h3 className="text-sm font-semibold text-primary flex items-center gap-2">
-              <FileText size={16} /> Financials
-            </h3>
-            <div className="space-y-3">
-              <div className="flex justify-between border-b border-slate-100 pb-2">
-                <span className="text-text-secondary text-sm">Claimed</span>
-                <span className="font-mono font-medium text-text-primary text-sm">₹{claim.claimed_amount}</span>
-              </div>
-              <div className="flex justify-between border-b border-slate-100 pb-2">
-                <span className="text-text-secondary text-sm">Approved</span>
-                <span className="font-mono font-bold text-status-success text-sm">₹{claim.approved_amount}</span>
-              </div>
+        {/* Left Column: Data & Insights (Span 5) */}
+        <div className="lg:col-span-5 space-y-6">
+          
+          {/* Summary / Verdict */}
+          {claim.human_summary && (
+            <div className="bg-gray-50 rounded-lg p-5 border border-gray-200">
+              <h3 className="text-[13px] font-semibold text-gray-900 flex items-center gap-2 mb-2">
+                <MessageSquare size={14} className="text-gray-500" /> Executive Summary
+              </h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                {claim.human_summary}
+              </p>
             </div>
-            
-            {/* Phase 2: Confidence-Annotated Extraction */}
-            <h3 className="text-sm font-semibold text-primary flex items-center gap-2 pt-4">
-              <Activity size={16} /> Extracted Data
-            </h3>
-            <div className="space-y-3">
-              {Object.keys(fieldConfidences).length > 0 ? (
-                Object.entries(fieldConfidences).map(([key, data]: [string, any]) => (
-                  <div key={key} className="text-sm">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-text-muted text-xs uppercase tracking-wider font-mono">{key.replace(/_/g, ' ')}</span>
-                      <ConfidenceBadge confidence={data.confidence || 0} />
-                    </div>
-                    <span className="text-text-primary break-words font-medium text-sm">
-                      {data.value !== null && data.value !== undefined ? String(data.value) : '—'}
-                    </span>
-                  </div>
-                ))
-              ) : (
-                Object.entries(claim.extracted_data || {}).map(([key, value]: [string, any]) => (
-                  <div key={key} className="text-sm">
-                    <span className="block text-text-muted text-xs uppercase tracking-wider font-mono mb-1">{key.replace(/_/g, ' ')}</span>
-                    <span className="text-text-primary break-words font-medium">
-                      {typeof value === 'object' ? JSON.stringify(value) : String(value)}
-                    </span>
-                  </div>
-                ))
-              )}
+          )}
+
+          {/* Financials */}
+          <Card className="p-0 overflow-hidden">
+            <div className="px-5 py-3 border-b border-gray-100 bg-white">
+              <h3 className="text-[13px] font-semibold text-gray-900 flex items-center gap-2">
+                <FileText size={14} className="text-gray-500" /> Financial Settlement
+              </h3>
+            </div>
+            <div className="p-5 flex flex-col gap-3">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-500">Claimed Amount</span>
+                <span className="font-mono text-sm text-gray-900">₹{claim.claimed_amount?.toLocaleString() || 0}</span>
+              </div>
+              <div className="flex justify-between items-center pt-3 border-t border-gray-100">
+                <span className="text-sm font-medium text-gray-900">Approved Amount</span>
+                <span className={`font-mono text-lg font-bold ${claim.approved_amount > 0 ? 'text-emerald-600' : 'text-gray-400'}`}>
+                  ₹{claim.approved_amount?.toLocaleString() || 0}
+                </span>
+              </div>
             </div>
           </Card>
-
-          {/* Phase 3: Fraud Analysis Panel */}
+          
+          {/* Fraud Analysis */}
           {semanticFraud.fraud_score !== undefined && (
-            <Card className="p-5 space-y-3">
+            <Card className="p-0 overflow-hidden">
               <button 
-                onClick={() => setFraudOpen(!fraudOpen)} 
-                className="w-full flex items-center justify-between text-sm font-semibold text-primary"
+                onClick={() => setFraudOpen(!fraudOpen)}
+                className="w-full px-5 py-3 border-b border-gray-100 bg-white flex items-center justify-between hover:bg-gray-50 transition-colors"
               >
-                <span className="flex items-center gap-2">
-                  <Shield size={16} /> Fraud Analysis
-                </span>
-                {fraudOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                <div className="flex items-center gap-2">
+                  <Shield size={14} className={semanticFraud.fraud_score > 0.5 ? 'text-red-500' : 'text-emerald-500'} />
+                  <h3 className="text-[13px] font-semibold text-gray-900">Risk Assessment</h3>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className={`text-xs font-mono font-medium px-2 py-0.5 rounded ${
+                    semanticFraud.fraud_score < 0.3 ? 'bg-emerald-50 text-emerald-700' : 
+                    semanticFraud.fraud_score < 0.7 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700'
+                  }`}>
+                    {((semanticFraud.fraud_score || 0) * 100).toFixed(0)}% Risk
+                  </span>
+                  {fraudOpen ? <ChevronUp size={14} className="text-gray-400" /> : <ChevronDown size={14} className="text-gray-400" />}
+                </div>
               </button>
               
-              {/* Score meter */}
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-2 rounded-full bg-slate-200 overflow-hidden">
-                  <div 
-                    className={`h-full rounded-full transition-all duration-500 ${
-                      semanticFraud.fraud_score < 0.3 ? 'bg-emerald-500' : 
-                      semanticFraud.fraud_score < 0.7 ? 'bg-yellow-500' : 'bg-red-500'
-                    }`}
-                    style={{ width: `${(semanticFraud.fraud_score || 0) * 100}%` }}
-                  />
-                </div>
-                <span className={`text-sm font-mono font-bold ${
-                  semanticFraud.fraud_score < 0.3 ? 'text-emerald-600' : 
-                  semanticFraud.fraud_score < 0.7 ? 'text-yellow-600' : 'text-red-600'
-                }`}>
-                  {((semanticFraud.fraud_score || 0) * 100).toFixed(0)}%
-                </span>
-              </div>
-              
               {fraudOpen && semanticFraud.flags && semanticFraud.flags.length > 0 && (
-                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-2 pt-2">
+                <div className="p-5 space-y-4 bg-gray-50/50">
                   {semanticFraud.flags.map((flag: any, idx: number) => (
-                    <div key={idx} className="text-xs p-2 rounded-md border border-slate-200 bg-slate-50">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Badge variant={flag.severity === 'high' ? 'error' : flag.severity === 'medium' ? 'warning' : 'default'}>
-                          {flag.severity}
-                        </Badge>
+                    <div key={idx} className="flex gap-3">
+                      <div className="mt-0.5">
+                        <AlertCircle size={14} className={flag.severity === 'high' ? 'text-red-500' : 'text-amber-500'} />
                       </div>
-                      <p className="text-text-secondary">{flag.signal}</p>
-                      {flag.fields_involved && flag.fields_involved.length > 0 && (
-                        <p className="text-text-muted mt-1">Fields: {flag.fields_involved.join(', ')}</p>
-                      )}
+                      <div>
+                        <p className="text-sm text-gray-700">{flag.signal}</p>
+                        {flag.fields_involved && flag.fields_involved.length > 0 && (
+                          <p className="text-[11px] text-gray-500 font-mono mt-1">Fields: {flag.fields_involved.join(', ')}</p>
+                        )}
+                      </div>
                     </div>
                   ))}
-                </motion.div>
+                </div>
               )}
               {fraudOpen && (!semanticFraud.flags || semanticFraud.flags.length === 0) && (
-                <p className="text-xs text-text-secondary pt-1">No significant anomalies detected.</p>
+                <div className="p-5 bg-gray-50/50 text-sm text-gray-500 text-center">
+                  No anomalous patterns detected.
+                </div>
               )}
             </Card>
           )}
+
+          {/* Extracted Data */}
+          <Card className="p-0 overflow-hidden">
+            <div className="px-5 py-3 border-b border-gray-100 bg-white">
+              <h3 className="text-[13px] font-semibold text-gray-900 flex items-center gap-2">
+                <Activity size={14} className="text-gray-500" /> OCR Extraction
+              </h3>
+            </div>
+            <div className="p-5">
+              <div className="grid grid-cols-1 gap-4">
+                {Object.keys(fieldConfidences).length > 0 ? (
+                  Object.entries(fieldConfidences).map(([key, data]: [string, any]) => (
+                    <div key={key} className="flex flex-col">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[11px] text-gray-500 uppercase tracking-wider font-medium">{key.replace(/_/g, ' ')}</span>
+                        <ConfidenceBadge confidence={data.confidence || 0} />
+                      </div>
+                      <span className="text-sm text-gray-900 font-medium">
+                        {data.value !== null && data.value !== undefined ? String(data.value) : '—'}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  Object.entries(claim.extracted_data || {}).map(([key, value]: [string, any]) => (
+                    <div key={key} className="flex flex-col">
+                      <span className="text-[11px] text-gray-500 uppercase tracking-wider font-medium mb-1">{key.replace(/_/g, ' ')}</span>
+                      <span className="text-sm text-gray-900 font-medium">
+                        {typeof value === 'object' ? JSON.stringify(value) : String(value)}
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </Card>
         </div>
 
-        {/* Right Column: Explainability Trace */}
-        <div className="md:col-span-2 space-y-6">
+        {/* Right Column: Processing Pipeline & Reasoning (Span 7) */}
+        <div className="lg:col-span-7 space-y-6">
+          
+          {/* Explainability Timeline */}
+          <Card className="p-0 overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-100 bg-white">
+              <h3 className="text-[13px] font-semibold text-gray-900 flex items-center gap-2">
+                <Brain size={14} className="text-gray-500" /> Adjudication Pipeline
+              </h3>
+            </div>
+            
+            <div className="p-6">
+              {/* Vertical Timeline */}
+              <div className="relative border-l border-gray-200 ml-3 space-y-8 pb-4">
+                
+                {/* Render Trace Steps */}
+                {claim.trace && claim.trace.map((step: any, index: number) => {
+                  const isPass = step.status === 'PASS'
+                  const isFail = step.status === 'FAIL'
+                  const isInfo = !isPass && !isFail
+                  
+                  return (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      key={index} 
+                      className="relative pl-6"
+                    >
+                      {/* Timeline Dot */}
+                      <span className={`absolute -left-2.5 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-white border-2 ${
+                        isPass ? 'border-emerald-500' : isFail ? 'border-red-500' : 'border-blue-500'
+                      }`}>
+                        {isPass ? <CheckCircle size={10} className="text-emerald-500" /> : 
+                         isFail ? <XCircle size={10} className="text-red-500" /> : 
+                         <div className="h-1.5 w-1.5 rounded-full bg-blue-500" />}
+                      </span>
+                      
+                      <div className="flex flex-col">
+                        <span className="text-sm font-semibold text-gray-900">{step.step}</span>
+                        <span className="text-sm text-gray-500 mt-1 leading-relaxed">{step.message}</span>
+                      </div>
+                    </motion.div>
+                  )
+                })}
+              </div>
+            </div>
+          </Card>
 
-          {/* Phase 1: Decision Breakdown Panel */}
+          {/* Rationale / Policy Breakdown */}
           {rationale.length > 0 && (
             <Card className="p-0 overflow-hidden">
               <button 
                 onClick={() => setRationaleOpen(!rationaleOpen)}
-                className="w-full px-5 py-3 border-b border-border bg-gradient-to-r from-indigo-50 to-slate-50 flex items-center justify-between"
+                className="w-full px-6 py-4 border-b border-gray-100 bg-white flex items-center justify-between hover:bg-gray-50 transition-colors"
               >
                 <div>
-                  <h3 className="text-sm font-semibold text-primary">Decision Breakdown</h3>
-                  <p className="text-xs text-text-secondary mt-0.5">{rationale.length} rule{rationale.length !== 1 ? 's' : ''} evaluated with policy references</p>
+                  <h3 className="text-[13px] font-semibold text-gray-900 text-left flex items-center gap-2">
+                    Policy Rules Applied
+                  </h3>
+                  <p className="text-[11px] text-gray-500 mt-0.5">{rationale.length} rule{rationale.length !== 1 ? 's' : ''} evaluated</p>
                 </div>
-                {rationaleOpen ? <ChevronUp size={16} className="text-text-secondary" /> : <ChevronDown size={16} className="text-text-secondary" />}
+                {rationaleOpen ? <ChevronUp size={14} className="text-gray-400" /> : <ChevronDown size={14} className="text-gray-400" />}
               </button>
               
               {rationaleOpen && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-5 space-y-3">
+                <div className="p-6 bg-gray-50/30 space-y-4">
                   {rationale.map((r: any, idx: number) => (
-                    <div key={idx} className="p-3 rounded-lg border border-slate-200 bg-white space-y-2">
-                      <div className="flex items-start justify-between gap-2 flex-wrap">
-                        <span className="font-mono text-xs px-2 py-0.5 rounded bg-slate-100 text-primary font-semibold">{r.rule_triggered}</span>
-                        <span className="text-xs text-indigo-600 font-mono bg-indigo-50 px-2 py-0.5 rounded">{r.policy_reference}</span>
+                    <div key={idx} className="p-4 rounded-lg border border-gray-200 bg-white space-y-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gray-100 pb-2">
+                        <span className="text-xs font-semibold text-gray-900">{r.rule_triggered}</span>
+                        <span className="text-[10px] text-blue-600 font-mono bg-blue-50 px-2 py-0.5 rounded border border-blue-100">{r.policy_reference}</span>
                       </div>
-                      <div className="flex gap-4 text-xs">
-                        <div>
-                          <span className="text-text-muted">Computed:</span>{' '}
-                          <span className="font-medium text-text-primary">{r.computed_value}</span>
+                      <p className="text-sm text-gray-600 leading-relaxed">{r.human_explanation}</p>
+                      
+                      <div className="flex gap-6 pt-2">
+                        <div className="flex flex-col">
+                          <span className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">Computed</span>
+                          <span className="font-mono text-sm text-gray-800">{r.computed_value}</span>
                         </div>
-                        <div>
-                          <span className="text-text-muted">Threshold:</span>{' '}
-                          <span className="font-medium text-text-primary">{r.threshold_value}</span>
+                        <div className="flex flex-col">
+                          <span className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">Threshold</span>
+                          <span className="font-mono text-sm text-gray-800">{r.threshold_value}</span>
                         </div>
                       </div>
-                      <p className="text-sm text-text-secondary leading-relaxed">{r.human_explanation}</p>
                     </div>
                   ))}
-                </motion.div>
+                </div>
               )}
             </Card>
           )}
 
-          {/* Existing: Explainability Trace */}
-          <Card className="p-0 overflow-hidden">
-            <div className="px-5 py-3 border-b border-border bg-slate-50">
-              <h3 className="text-sm font-semibold text-primary">Explainability Trace</h3>
-              <p className="text-xs text-text-secondary mt-1">Audit log of system checks and reasoning.</p>
-            </div>
-            
-            <div className="p-5 space-y-4">
-              {/* Decision Reason */}
-              <div className="mb-6 p-4 rounded-md bg-slate-50 border border-slate-200">
-                <h4 className="text-sm font-semibold text-primary mb-2">Final Reasoning</h4>
-                <p className="text-text-secondary leading-relaxed text-sm">{claim.reason}</p>
-              </div>
-
-              {/* Trace Logs */}
-              <div className="space-y-3">
-                <h4 className="text-sm font-semibold text-primary mb-3">Verification Steps</h4>
-                {claim.trace && claim.trace.map((step: any, index: number) => (
-                  <motion.div 
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    key={index} 
-                    className="flex gap-3 text-sm p-3 rounded-md border border-slate-200 bg-white shadow-sm"
-                  >
-                    <div className="mt-0.5 shrink-0">
-                      {step.status === 'PASS' ? <CheckCircle size={16} className="text-status-success" /> : 
-                       step.status === 'FAIL' ? <XCircle size={16} className="text-status-error" /> : 
-                       <AlertCircle size={16} className="text-status-info" />}
-                    </div>
-                    <div>
-                      <span className="font-semibold text-text-primary block mb-1 text-sm">{step.step}</span>
-                      <span className="text-text-secondary text-sm">{step.message}</span>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </Card>
-
-          {/* Phase 6: Handler Checklist */}
+          {/* Actionable Checklist */}
           {handlerChecklist && handlerChecklist.items && handlerChecklist.items.length > 0 && (
-            <Card className="p-0 overflow-hidden border-2 border-amber-200">
-              <button
-                onClick={() => setChecklistOpen(!checklistOpen)}
-                className="w-full px-5 py-3 border-b border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 flex items-center justify-between"
-              >
+            <Card className="p-0 overflow-hidden border-indigo-100">
+              <div className="px-6 py-4 border-b border-indigo-50 bg-indigo-50/30 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <ClipboardCheck size={16} className="text-amber-600" />
+                  <ClipboardCheck size={16} className="text-indigo-600" />
                   <div className="text-left">
-                    <h3 className="text-sm font-semibold text-amber-800">Handler Checklist</h3>
-                    <p className="text-xs text-amber-600">{handlerChecklist.items.length} items • Est. {handlerChecklist.total_estimated_minutes} min</p>
+                    <h3 className="text-[13px] font-semibold text-indigo-900">Required Actions</h3>
                   </div>
                 </div>
-                {checklistOpen ? <ChevronUp size={16} className="text-amber-600" /> : <ChevronDown size={16} className="text-amber-600" />}
-              </button>
+                <span className="text-xs font-medium text-indigo-600 bg-indigo-100 px-2 py-1 rounded">
+                  {handlerChecklist.total_estimated_minutes} min est.
+                </span>
+              </div>
               
-              {checklistOpen && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-5 space-y-3">
-                  {handlerChecklist.items.map((item: any, idx: number) => (
-                    <div key={idx} className="flex gap-3 p-3 rounded-md border border-amber-100 bg-amber-50/50">
-                      <div className="w-6 h-6 rounded-full bg-amber-200 flex items-center justify-center text-xs font-bold text-amber-800 shrink-0">
-                        {item.priority}
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-text-primary">{item.action}</p>
-                        <p className="text-xs text-text-secondary mt-1">{item.reason}</p>
-                        <div className="flex items-center gap-3 mt-1">
-                          <span className="text-xs text-text-muted font-mono">{item.source_agent}</span>
-                          <span className="text-xs text-text-muted">~{item.estimated_minutes} min</span>
-                        </div>
+              <div className="p-0">
+                {handlerChecklist.items.map((item: any, idx: number) => (
+                  <div key={idx} className="flex gap-4 p-4 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
+                    <div className="mt-0.5">
+                      <div className="w-4 h-4 rounded border-2 border-gray-300 bg-white" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-900">{item.action}</p>
+                      <p className="text-sm text-gray-500 mt-1">{item.reason}</p>
+                      <div className="flex items-center gap-3 mt-2">
+                        <span className="text-[10px] text-gray-400 uppercase tracking-wider font-medium">{item.source_agent}</span>
+                        <span className="text-[10px] text-gray-400 font-mono px-1.5 py-0.5 bg-gray-100 rounded">{item.estimated_minutes}m</span>
+                        <span className="text-[10px] text-gray-400 font-mono px-1.5 py-0.5 bg-gray-100 rounded">{item.priority}</span>
                       </div>
                     </div>
-                  ))}
-                </motion.div>
-              )}
+                  </div>
+                ))}
+              </div>
             </Card>
           )}
-        </div>
 
+        </div>
       </div>
     </div>
   )
